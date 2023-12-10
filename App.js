@@ -1,46 +1,33 @@
-import Animated, {
-  useSharedValue,
-  withTiming,
-  useAnimatedStyle,
-  Easing,
-} from "react-native-reanimated";
-import { View, Button } from "react-native";
+import React, { useEffect } from "react";
+import { LogBox } from "react-native";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import { NavigationContainer } from "@react-navigation/native";
+import { NativeBaseProvider } from "native-base";
+import ConvertScreen from "./src/screen/ConvertScreen";
+import CountrySelectScreen from "./src/screen/CountrySelectScreen";
+import CryptoSelectScreen from "./src/screen/CryptoSelectScreen";
+import BigC from "./src/screen/BigC";
 
-export default function AnimatedStyleUpdateExample(props) {
-  const randomWidth = useSharedValue(10);
+const Drawer = createDrawerNavigator();
 
-  const config = {
-    duration: 500,
-    easing: Easing.bezier(0.5, 0.01, 0, 1),
-  };
-
-  const style = useAnimatedStyle(() => {
-    return {
-      width: withTiming(randomWidth.value, config),
-    };
-  });
-
+const App = () => {
+  useEffect(() => {
+    LogBox.ignoreLogs([
+      "In React 18, SSRProvider is not necessary and is a noop. You can remove it from your app.",
+    ]);
+  }, []);
   return (
-    <View
-      style={{
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-        flexDirection: "column",
-      }}
-    >
-      <Animated.View
-        style={[
-          { width: 100, height: 80, backgroundColor: "black", margin: 30 },
-          style,
-        ]}
-      />
-      <Button
-        title="toggle"
-        onPress={() => {
-          randomWidth.value = Math.random() * 350;
-        }}
-      />
-    </View>
+    <NativeBaseProvider>
+      <NavigationContainer>
+        <Drawer.Navigator initialRouteName="Home">
+          <Drawer.Screen name="Home" component={ConvertScreen} />
+          <Drawer.Screen name="SelectCountry" component={CountrySelectScreen} />
+          <Drawer.Screen name="SelectCrypto" component={CryptoSelectScreen} />
+          <Drawer.Screen name="Franx" component={BigC} />
+        </Drawer.Navigator>
+      </NavigationContainer>
+    </NativeBaseProvider>
   );
-}
+};
+
+export default App;
