@@ -92,22 +92,24 @@ const ConvertScreen = ({ route }) => {
 
   const handleCrypto = () => {};
 
-  const handleConvert = () => {
-    if (!inputValue || isNaN(inputValue)) {
-      alert("Please enter a valid numeric value");
-      return;
-    }
+  const handleConvert = async () => {
+    try {
+      if (!inputValue || isNaN(inputValue)) {
+        alert("Please enter a valid numeric value");
+        return;
+      }
 
-    if (!selectedCurrency) {
-      alert("Please select a currency");
-      return;
-    }
+      if (!selectedCurrency) {
+        alert("Please select a currency");
+        return;
+      }
 
-    // Fetch the conversion rate for the selected currency
-    axios
-      .get(`https://api.exchangerate-api.com/v4/latest/${selectedCurrency}`)
-      .then((response) => {
-        const newSelectedCurrencies = kanye.map((currency) => {
+      // Fetch the conversion rate for the selected currency
+      const response = await axios.get(
+        `https://api.exchangerate-api.com/v4/latest/${selectedCurrency}`
+      );
+      const newSelectedCurrencies = await Promise.all(
+        kanye.map(async (currency) => {
           const conversionRate = response.data.rates[currency.code];
           if (!conversionRate) {
             alert("Conversion rate not available for the selected currency");
@@ -119,55 +121,41 @@ const ConvertScreen = ({ route }) => {
             convertedValue,
             flags: currency.flag,
           };
-        });
+        })
+      );
 
-        setConvertedValue(newSelectedCurrencies);
-        if (!inputValue || isNaN(inputValue)) {
-          alert("Please enter a valid numeric value");
-          return;
+      setConvertedValue(newSelectedCurrencies);
+
+      if (!inputValue || isNaN(inputValue) || !selectedCurrency) {
+        alert("Please enter a valid numeric value and select a currency");
+        return;
+      }
+
+      const cryptoConvertPromises = west.map(async (crypto) => {
+        try {
+          const cryptoResponse = await axios.get(
+            `https://api.coingecko.com/api/v3/simple/price?ids=${crypto.id}&vs_currencies=${selectedCurrency}`
+          );
+
+          const conversionRate = cryptoResponse.data[crypto.id];
+          const k = Object.keys(conversionRate)[0];
+          const convertedValue = (inputValue * conversionRate[k]).toFixed(2);
+
+          return { code: crypto.name, convertedValue, flags: crypto.image };
+        } catch (error) {
+          console.error("Error fetching conversion rate:", error);
+          alert("An error occurred while fetching conversion rate");
+          return null;
         }
-
-        if (!selectedCurrency) {
-          alert("Please select a currency");
-          return;
-        }
-        setCryptConvert([]);
-        west.forEach((crypto) => {
-          console.log("logger:", crypto.id, selectedCurrency);
-          axios
-            .get(
-              `https://api.coingecko.com/api/v3/simple/price?ids=${crypto.id}&vs_currencies=${selectedCurrency}`
-            )
-            .then((response) => {
-              console.log("Response:", response.data);
-
-              // Extract the conversion rate for the selected currency
-              const conversionRate = response.data[crypto.id];
-              const k = Object.keys(conversionRate)[0];
-              console.log("Conversion Rate:", conversionRate[k]);
-
-              // Calculate the converted value
-              const convertedValue = (inputValue * conversionRate[k]).toFixed(
-                2
-              );
-
-              // Update the state with the converted value for the current cryptocurrency
-              setCryptConvert((prevCryptConvert) => [
-                ...prevCryptConvert,
-                { code: crypto.name, convertedValue, flags: crypto.image },
-              ]);
-            })
-            .catch((error) => {
-              console.error("Error fetching conversion rate:", error);
-              alert("An error occurred while fetching conversion rate");
-            });
-        });
-      })
-      .catch((error) => {
-        console.error("Error fetching conversion rate:", error);
-        alert("An error occurred while fetching conversion rate");
       });
-    setAllList([cryptCoverted, convertedValue]);
+
+      const cryptoConvertedResults = await Promise.all(cryptoConvertPromises);
+      setCryptConvert(cryptoConvertedResults);
+      setAllList([cryptoConvertedResults, newSelectedCurrencies]);
+    } catch (error) {
+      console.error("Error fetching conversion rate:", error);
+      alert("An error occurred while fetching conversion rate");
+    }
   };
 
   const handleCurrencyChange = (value) => {
