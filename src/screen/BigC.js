@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Box,
   HStack,
@@ -11,6 +11,8 @@ import {
   Text,
   Flex,
 } from "native-base";
+
+import { useCurrency } from "../../CurrencyContext";
 
 const Example = () => {
   const renderFlexItems = (direction) => (
@@ -54,6 +56,11 @@ const Example = () => {
 };
 
 const BigC = () => {
+  const { selectedCurrency } = useCurrency();
+
+  useEffect(() => {
+    console.log("selectedCurrency", selectedCurrency);
+  }, []);
   return (
     <>
       <HStack space={4} mx="auto">

@@ -8,8 +8,6 @@ import {
   TextInput,
 } from "react-native";
 import axios from "axios";
-
-// New import statement
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const CountrySelectScreen = ({ navigation, route }) => {
@@ -19,18 +17,16 @@ const CountrySelectScreen = ({ navigation, route }) => {
   const [filteredCountries, setFilteredCountries] = useState([]);
 
   useEffect(() => {
-    // Fetch the list of countries from cache or API
     const fetchCountries = async () => {
       try {
-        const cachedCountries = await AsyncStorage.getItem("selectedCountries");
+        const cachedCountries = await AsyncStorage.getItem("allCountries");
         if (cachedCountries) {
           setCountries(JSON.parse(cachedCountries));
         } else {
           const response = await axios.get("https://restcountries.com/v2/all");
           setCountries(response.data);
-          // Update the storage key with the new package name
           await AsyncStorage.setItem(
-            "selectedCountries",
+            "allCountries",
             JSON.stringify(response.data)
           );
         }
@@ -43,7 +39,6 @@ const CountrySelectScreen = ({ navigation, route }) => {
   }, []);
 
   useEffect(() => {
-    // Update the filtered countries when searchText changes
     const filtered = countries.filter((country) =>
       country.name.toLowerCase().includes(searchText.toLowerCase())
     );
@@ -51,19 +46,17 @@ const CountrySelectScreen = ({ navigation, route }) => {
   }, [searchText, countries]);
 
   const handleCountrySelect = (country) => {
-    // Toggle the selection status of the country
     const isSelected = selectedCountries.some(
       (selected) => selected.alpha2Code === country.alpha2Code
     );
+
     if (isSelected) {
-      // If already selected, remove from the list
       setSelectedCountries((prevSelected) =>
         prevSelected.filter(
           (selected) => selected.alpha2Code !== country.alpha2Code
         )
       );
     } else {
-      // If not selected, add to the list
       setSelectedCountries((prevSelected) => [...prevSelected, country]);
     }
   };
@@ -88,12 +81,6 @@ const CountrySelectScreen = ({ navigation, route }) => {
   );
 
   const handleDone = () => {
-    // Save selected countries to cache
-    AsyncStorage.setItem(
-      "selectedCountries",
-      JSON.stringify(selectedCountries)
-    );
-    // Pass the selected countries back to the home screen
     navigation.navigate("Home", { selectedCountries });
   };
 
@@ -106,7 +93,7 @@ const CountrySelectScreen = ({ navigation, route }) => {
         onChangeText={(text) => setSearchText(text)}
       />
       <FlatList
-        data={filteredCountries}
+        data={searchText ? filteredCountries : countries}
         keyExtractor={(item) => item.alpha2Code}
         renderItem={renderCountryItem}
       />

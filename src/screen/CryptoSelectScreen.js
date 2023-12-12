@@ -9,17 +9,23 @@ import {
   StyleSheet,
 } from "react-native";
 
-const CryptoSelectScreen = ({ navigation }) => {
+import { Button } from "native-base";
+import { useCurrency } from "../../CurrencyContext";
+
+const CryptoSelectScreen = ({ navigation, route }) => {
   const [cryptos, setCryptos] = useState([]);
   const [filteredCryptos, setFilteredCryptos] = useState([]);
   const [selectedCryptos, setSelectedCryptos] = useState([]);
   const [searchText, setSearchText] = useState("");
-
+  const { selectedCurrency } = useCurrency();
   useEffect(() => {
+    console.log(selectedCurrency?.toLowerCase());
     // Fetch the list of cryptocurrencies (You may use a crypto API for this)
     // For example, using CoinGecko API
-    fetch("https://api.coingecko.com/api/v3/coins/list")
-      .then((response) => response.json())
+    fetch(
+      `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${selectedCurrency}&order=market_cap_desc&per_page=100&page=1&sparkline=false&locale=en`
+    )
+      .then((response) => response.json()) // Add a return statement here
       .then((data) => {
         setCryptos(data);
         setFilteredCryptos(data);
@@ -85,6 +91,9 @@ const CryptoSelectScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <Button onPress={() => console.log(cryptos, currency)}>
+        <Text>HI</Text>
+      </Button>
       <TextInput
         style={styles.searchInput}
         placeholder="Search Cryptos"

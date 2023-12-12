@@ -7,6 +7,7 @@ import ConvertScreen from "./src/screen/ConvertScreen";
 import CountrySelectScreen from "./src/screen/CountrySelectScreen";
 import CryptoSelectScreen from "./src/screen/CryptoSelectScreen";
 import BigC from "./src/screen/BigC";
+import { CurrencyProvider } from "./CurrencyContext";
 
 const Drawer = createDrawerNavigator();
 
@@ -18,14 +19,19 @@ const App = () => {
   }, []);
   return (
     <NativeBaseProvider>
-      <NavigationContainer>
-        <Drawer.Navigator initialRouteName="Home">
-          <Drawer.Screen name="Home" component={ConvertScreen} />
-          <Drawer.Screen name="SelectCountry" component={CountrySelectScreen} />
-          <Drawer.Screen name="SelectCrypto" component={CryptoSelectScreen} />
-          <Drawer.Screen name="Franx" component={BigC} />
-        </Drawer.Navigator>
-      </NavigationContainer>
+      <CurrencyProvider>
+        <NavigationContainer>
+          <Drawer.Navigator initialRouteName="Home">
+            <Drawer.Screen name="Home" component={ConvertScreen} />
+            <Drawer.Screen
+              name="SelectCountry"
+              component={CountrySelectScreen}
+            />
+            <Drawer.Screen name="SelectCrypto" component={CryptoSelectScreen} />
+            <Drawer.Screen name="Franx" component={BigC} />
+          </Drawer.Navigator>
+        </NavigationContainer>
+      </CurrencyProvider>
     </NativeBaseProvider>
   );
 };
