@@ -9,21 +9,16 @@ import {
   Box,
   Image,
   FlatList,
-  Heading,
-  Avatar,
   VStack,
-  Spacer,
 } from "native-base";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import axios from "axios";
 import RNPickerSelect from "react-native-picker-select";
-import { useNavigation } from "@react-navigation/native";
 import { useCurrency } from "../../CurrencyContext";
 const theme = createTheme();
 
 const ConvertScreen = ({ route }) => {
   const [currencies, setCurrencies] = useState([]);
-  //const [selectedCurrency, setSelectedCurrency] = useState("");
   const [inputValue, setInputValue] = useState("");
   const [convertedValue, setConvertedValue] = useState([]);
   const [cryptCoverted, setCryptConvert] = useState([]);
@@ -35,14 +30,6 @@ const ConvertScreen = ({ route }) => {
   const selectedCryptos = route.params?.selectedCryptos;
 
   const { selectedCurrency, setCurrency } = useCurrency();
-
-  const navigation = useNavigation();
-
-  const handleNavigateToCryptoSelect = () => {
-    navigation.navigate("SelectCrypto", {
-      selectedCurrency,
-    });
-  };
 
   useEffect(() => {
     if (selectedCryptos) {
@@ -89,8 +76,6 @@ const ConvertScreen = ({ route }) => {
       })
       .catch((error) => console.error("Error fetching currencies:", error));
   }, []);
-
-  const handleCrypto = () => {};
 
   const handleConvert = async () => {
     try {
