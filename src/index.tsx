@@ -17,7 +17,7 @@ const App = () => {
   return (
     <CurrencyProvider>
       <Drawer.Navigator
-        initialRouteName="Main"
+        initialRouteName="Home"
         drawerContent={(props) => <SideBar {...props} />}
         screenOptions={{
           headerShown: false,
@@ -26,7 +26,6 @@ const App = () => {
           overlayColor: "#00000000",
         }}
       >
-        <Drawer.Screen name="Main" component={MainScreen} />
         <Drawer.Screen name="Home" component={ConvertScreen} />
         <Drawer.Screen name="countrySelect" component={CountrySelectScreen} />
         <Drawer.Screen name="SelectCountry" component={CountrySelectScreen} />

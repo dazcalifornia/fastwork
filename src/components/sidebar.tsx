@@ -22,12 +22,7 @@ const Sidebar = (props: DrawerContentComponentProps) => {
   const handlePressBackButton = useCallback(() => {
     navigation.closeDrawer();
   }, [navigation]);
-  const handlePressMenuMain = useCallback(() => {
-    navigation.navigate("Main");
-  }, [navigation]);
-  const handlePressMenuAbout = useCallback(() => {
-    navigation.navigate("Home");
-  }, [navigation]);
+
   const handlePressMenuCrypto = useCallback(() => {
     navigation.navigate("SelectCrypto");
   }, [navigation]);
@@ -60,7 +55,7 @@ const Sidebar = (props: DrawerContentComponentProps) => {
           />
         </HStack>
         <Avatar
-          source={require("../assets/profile-image.png")}
+          source={require("../assets/4.png")}
           size="xl"
           borderRadius={100}
           mb={6}
@@ -71,37 +66,23 @@ const Sidebar = (props: DrawerContentComponentProps) => {
           Currency convert Application
         </Heading>
         <MenuButton
-          active={currentRoute === "Main"}
-          onPress={handlePressMenuMain}
-          icon="inbox"
-        >
-          Tasks
-        </MenuButton>
-        <MenuButton
-          active={currentRoute === "About"}
-          onPress={handlePressMenuAbout}
-          icon="info"
-        >
-          About
-        </MenuButton>
-        <MenuButton
           active={currentRoute === "Home"}
           onPress={handlePressMenuHome}
-          icon="inbox"
+          icon="home"
         >
           Home
         </MenuButton>
         <MenuButton
           active={currentRoute === "SelectCrypto"}
           onPress={handlePressMenuCrypto}
-          icon="info"
+          icon="codesandbox"
         >
           Select Crypto
         </MenuButton>
         <MenuButton
           active={currentRoute === "SelectCountry"}
           onPress={handlePressMenuCountry}
-          icon="inbox"
+          icon="globe"
         >
           Select Country
         </MenuButton>
