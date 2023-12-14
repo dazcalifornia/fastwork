@@ -10,6 +10,8 @@ import CryptoSelectScreen from "./screen/CryptoSelectScreen";
 import BigC from "./screen/BigC";
 
 import { CurrencyProvider } from "../CurrencyContext";
+import SelectCurr from "./screen/newSelectCurr";
+import SelectCrypt from "./screen/newSlectCryp";
 
 const Drawer = createDrawerNavigator();
 
@@ -27,9 +29,11 @@ const App = () => {
         }}
       >
         <Drawer.Screen name="Home" component={ConvertScreen} />
-        <Drawer.Screen name="countrySelect" component={CountrySelectScreen} />
         <Drawer.Screen name="SelectCountry" component={CountrySelectScreen} />
         <Drawer.Screen name="SelectCrypto" component={CryptoSelectScreen} />
+        <Drawer.Screen name="Main" component={MainScreen} />
+        <Drawer.Screen name="Curr" component={SelectCurr} />
+        <Drawer.Screen name="Crypt" component={SelectCrypt} />
       </Drawer.Navigator>
     </CurrencyProvider>
   );

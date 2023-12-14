@@ -32,6 +32,17 @@ const Sidebar = (props: DrawerContentComponentProps) => {
   const handlePressMenuHome = useCallback(() => {
     navigation.navigate("Home");
   }, [navigation]);
+
+  const handlePressMenuMain = useCallback(() => {
+    navigation.navigate("Main");
+  }, [navigation]);
+  const handlePressMenuCrypt = useCallback(() => {
+    navigation.navigate("Crypt");
+  }, [navigation]);
+  const handlePressMenuCurr = useCallback(() => {
+    navigation.navigate("Curr");
+  }, [navigation]);
+
   return (
     <AnimatedColorBox
       safeArea
@@ -85,6 +96,27 @@ const Sidebar = (props: DrawerContentComponentProps) => {
           icon="globe"
         >
           Select Country
+        </MenuButton>
+        <MenuButton
+          active={currentRoute === "Main"}
+          onPress={handlePressMenuMain}
+          icon="globe"
+        >
+          Franx
+        </MenuButton>
+        <MenuButton
+          active={currentRoute === "Crypt"}
+          onPress={handlePressMenuCrypt}
+          icon="globe"
+        >
+          Franx Crypt
+        </MenuButton>
+        <MenuButton
+          active={currentRoute === "Curr"}
+          onPress={handlePressMenuCurr}
+          icon="globe"
+        >
+          Franx Curr
         </MenuButton>
       </VStack>
       <Center>
